@@ -4,7 +4,7 @@ const sequelize = new Sequelize('dutybot', 'dutybot', 'password' , {
     host: 'localhost',
     dialect: 'sqlite',
     logging: false,
-    storage: 'dutybot.sqlite',
+    storage: 'burgerboss.sqlite',
 });
 
 module.exports = {
