@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
+const { MessageEmbed } = require('discord.js');
 const {Employees} = require('../database.js');
-
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -22,11 +22,10 @@ module.exports = {
 			subcommand
 				.setName('remove')
 				.setDescription('Usuń pracownika z bazy danych')
-				.addStringOption(option =>
-					option.setName('clientid')
-					.setDescription('Użytkownik Discord')
-					.setRequired(true)
-					.addChoice("Elliot Miller", "123456789")))
+				.addIntegerOption(option =>
+					option.setName('id')
+					.setDescription('ID pracownika, sprawdź za pomocą komendy od listy pracowników')
+					.setRequired(true)))
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('list')
@@ -54,15 +53,48 @@ module.exports = {
 				return interaction.followUp(error.message);
 			}
 		} else if (interaction.options.getSubcommand() === 'remove') {
-			let option = interaction.options.get("clientid")
-			
-			console.log(option.value);
+			const employeeId = interaction.options.getInteger('id');
+
+			try {
+				const employeeData = await Employees.findOne({raw: true, where: { id: employeeId } });
+				const employee = await Employees.destroy({ where: { id: employeeId } });
+
+				if(employeeData !== null)
+				{
+					return interaction.reply({content: `Pomyślnie usunięto pracownika **${employeeData.name} (${employeeData.clientid})** z bazy danych!`, ephermal: true});
+				}
+
+				return interaction.reply({ content:`Nie znaleziono pracownika o ID: **${employeeId}**`, ephermal:true });
+			} catch (error) {
+				console.log(error);
+
+				return interaction.reply({content: 'Wystąpił nieznany błąd!', ephermal: true});
+			}
 		} else if (interaction.options.getSubcommand() === 'list') {
-			const employeeList = await Employees.findAll({ attributes: ['name', 'clientid'] });
+			
+			const embed = new MessageEmbed()
+                        .setColor('#3da324')
+                        .setTitle(`Lista Pracowników`)
+                        .setDescription(`Lista pracowników znajdujących się aktualnie w bazie danych`);
 
-			const employeeString = employeeList.map(t => t.name).join(', ') || 'No tags set.'
+			try {
+				const employeeMap = await Employees.findAll({raw: true, attributes: ['id', 'name', 'clientid'] });
+	
+				const employeeList = Object.fromEntries(employeeMap.entries());
+	
+				Object.keys(employeeList).forEach(i => {
+					embed.addField(`${employeeList[i]['name']} - ID: (${employeeList[i]['id']})`, employeeList[i]['clientid']);
+				})
+				channel = interaction.guild.channels.cache.get(interaction.channelId);
+	
+				channel.send({ embeds: [embed] });
 
-			return interaction.reply(`Lista pracowników: ${employeeString}`);
+				return interaction.reply({content: `**Pomyślnie wysłano listę pracowników!**`, ephermal: true});
+			} catch (error) {
+				console.log(error);
+				
+				return interaction.reply({content: `Wystąpił błąd!`, ephermal: true});
+			}
 		}
 	},
 };
