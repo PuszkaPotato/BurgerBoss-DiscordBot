@@ -1,10 +1,13 @@
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('dutybot', 'dutybot', 'password' , {
+const sequelize = new Sequelize('burgerboss', 'burgerboss', 'password' , {
     host: 'localhost',
     dialect: 'sqlite',
     logging: false,
     storage: 'burgerboss.sqlite',
+    logging: function (str) {
+        console.log(`Sequelize: ${str}`);
+    }
 });
 
 module.exports = {
@@ -15,17 +18,11 @@ module.exports = {
         clientid: {
             type: Sequelize.INTEGER,
             unique: true,
-        },
-        time_start: {
-            type: Sequelize.INTEGER,
-            defaultValue: 0,
-            allowNull: false,
-        },
+        }
     }),
     Bills : sequelize.define('bills', {
         issuer: Sequelize.STRING,
         amount: Sequelize.INTEGER,
-        client: Sequelize.STRING,
-        date: Sequelize.DATE
+        client: Sequelize.STRING
     }),
 }

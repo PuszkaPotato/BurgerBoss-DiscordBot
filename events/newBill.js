@@ -6,7 +6,7 @@ module.exports = {
     execute(message) {
             if(message.channelId === '981493766332514304')
             {
-                if (message.author.bot && message.embed) {
+                if (message.author.bot && message.embeds) {
                     message = message.embeds[0].description;
       
                     let client = message.match('\\*\\*(.*)\\s\\(')
@@ -17,8 +17,6 @@ module.exports = {
       
                     if(price && employee && client)
                     {
-                        const currentTime = new Date();
-                        
                         console.log(client[1]);
                         console.log(price[1]);
                         console.log(employee[1]);
@@ -28,8 +26,7 @@ module.exports = {
                             const bill = Bills.create({
                                 issuer: employee[1],
                                 amount: price[1],
-                                client: client[1],
-                                date: currentTime
+                                client: client[1]
                             });
 
                             console.log(`Pomyślnie dodano nowy rachunek do bazy danych`);
@@ -41,6 +38,8 @@ module.exports = {
             
                             console.log(`Wystąpił nieznany błąd`);
                         }
+                    } else {
+                        console.log('Nie udało się znaleźć danych rachunku');
                     }
                 }
             }
