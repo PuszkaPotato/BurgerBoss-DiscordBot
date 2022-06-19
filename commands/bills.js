@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { Bills } = require('../database.js');
 const { MessageEmbed } = require('discord.js');
 const { Op, Sequelize } = require('sequelize');
+const dateHelper = require("../helpers/dateHelper.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -18,7 +19,7 @@ module.exports = {
 				.addStringOption(option =>
 					option.setName('enddate')
 					.setDescription('Końcowa data sumowanych rachunków')
-					.setRequired(false))
+					.setRequired(true))
 				
 		)
 		.addSubcommand(subcommand => 
@@ -46,38 +47,28 @@ module.exports = {
 	async execute(interaction) {
 		if (interaction.options.getSubcommand() === 'totals')
 		{
-			const startDate = interaction.options.getString('startdate').split("/");
+			const startDate = interaction.options.getString('startdate');
 
-			const endDate = interaction.options.getString('enddate').split("/");
+			const endDate = interaction.options.getString('enddate');
 
-			//We are pretty much adding hours because date is 2 hours behind
-			var startDateObject = new Date(`${startDate[1]}/${startDate[0]}/${startDate[2]}`).setHours(02, 00, 00);
+			const dateRange = dateHelper.ConvertDateRange(startDate, endDate);
 
-			//We want it to be the end of the day so we set end of the day + 2 hours
-			var endDateObject = new Date(`${endDate[1]}/${endDate[0]}/${endDate[2]}`).setHours(25,59,59);
-
-			var startDateObject = new Date(startDateObject);
-
-			var endDateObject = new Date(endDateObject);
-
-			console.log(startDateObject.toISOString());
-
-			console.log(endDateObject.toISOString());
-
-			const bills = Bills.findAll({
+			const bills = await Bills.findAll({
 				raw: true,
 				attributes: [
 					'issuer',
-					[Sequelize.fn('SUM', Sequelize.col('amount')), 'amount']
+					[Sequelize.fn('SUM', Sequelize.col('amount')), 'sum_amount']
 				],
 				group: ['issuer'],
-				 where: {createdAt: {[Op.between]: [startDateObject.toISOString(), endDateObject.toISOString()]}}
+				order: [
+					[Sequelize.col('sum_amount'), 'DESC']
+				],
+				 where: {createdAt: {[Op.between]: [dateRange['startDate'], dateRange['endDate']]}}
 				}).then( async res => {
-					content = `Suma rachunków między dniami **${interaction.options.getString('startdate')}** - **${interaction.options.getString('enddate')}**\n\n`;
+					content = `Suma rachunków między dniami **${dateRange['startDateString']}** - **${dateRange['endDateString']}**\n\n`;
 					res.forEach(element => {
-						content = content.concat(`**${element['issuer']}**: **${element['amount']}**\n`);
+						content = content.concat(`**${element['issuer']}**: **${element['sum_amount']}**\n`);
 					});
-					console.log(content);
 
 					await interaction.reply({content: `**Suma Wystawionych Rachunków**`, ephermal: false});
 
