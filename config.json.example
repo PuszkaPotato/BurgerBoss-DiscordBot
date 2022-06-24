@@ -1,4 +1,16 @@
 {
     "token":    "YOUR_TOKEN_HERE",
-    "clientId": "APPLICATION_CLIENTID_HERE"
+    "clientId": "APPLICATION_CLIENTID_HERE",
+
+    "DB" : {
+        "database" : "burgerboss",
+        "user" : "burgerboss",
+        "password" : "password",
+        "host" : "localhost",
+        "dialect" : "sqlite",
+        "storage" : "burgerboss.sqlite",
+
+        "logging" : false,
+        "loggingDev" : false
+    }
 }
