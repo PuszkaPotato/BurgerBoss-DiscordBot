@@ -79,7 +79,8 @@ module.exports = {
 				raw: true,
 				attributes: [
 					'issuer',
-					[Sequelize.fn('SUM', Sequelize.col('amount')), 'sum_amount']
+					[Sequelize.fn('SUM', Sequelize.col('amount')), 'sum_amount'],
+					[Sequelize.fn('COUNT', Sequelize.col('amount')), 'count_amount']
 				],
 				group: ['issuer'],
 				order: [
@@ -89,7 +90,7 @@ module.exports = {
 				}).then( async res => {
 					content = `Suma rachunków między dniami **${dateRange['startDateString']}** - **${dateRange['endDateString']}**\n\n`;
 					res.forEach(element => {
-						content = content.concat(`**${element['issuer']}**: **${element['sum_amount']}**\n`);
+						content = content.concat(`**${element['issuer']}**: **${element['sum_amount']} | ${element['count_amount']}**\n`);
 					});
 
 					await interaction.reply({content: `**Suma Wystawionych Rachunków**`, ephermal: false});
