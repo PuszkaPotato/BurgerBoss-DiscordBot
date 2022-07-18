@@ -20,8 +20,7 @@
  * 	@email canexione@gmail.com
  */
 
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const {Employees} = require('../database.js');
 
 module.exports = {
@@ -79,7 +78,7 @@ module.exports = {
 
 			try {
 				const employeeData = await Employees.findOne({raw: true, where: { id: employeeId } });
-				const employee = await Employees.destroy({ where: { id: employeeId } });
+				const employee = Employees.destroy({ where: { id: employeeId } });
 
 				if(employeeData !== null)
 				{
@@ -94,7 +93,7 @@ module.exports = {
 			}
 		} else if (interaction.options.getSubcommand() === 'list') {
 			
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
                         .setColor('#3da324')
                         .setTitle(`Lista Pracowników`)
                         .setDescription(`Lista pracowników znajdujących się aktualnie w bazie danych`);
@@ -105,7 +104,9 @@ module.exports = {
 				const employeeList = Object.fromEntries(employeeMap.entries());
 	
 				Object.keys(employeeList).forEach(i => {
-					embed.addField(`${employeeList[i]['name']} - ID: (${employeeList[i]['id']})`, employeeList[i]['clientid']);
+					embed.addFields([
+						{ name: `${employeeList[i]['name']} - ID (${employeeList[i]['id']})`, value: employeeList[i]['clientid']}
+					])
 				})
 				channel = interaction.guild.channels.cache.get(interaction.channelId);
 	

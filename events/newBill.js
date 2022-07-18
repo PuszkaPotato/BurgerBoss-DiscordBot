@@ -21,22 +21,28 @@
  */
 
 const {Bills} = require('../database.js');
+const {botChannels} = require('../config.json');
 
 module.exports = {
     name: 'newBill',
     eventType: 'messageCreate',
     execute(message) {
-            if(message.channelId === '981493766332514304')
-            {
-                if (message.author.bot && message.embeds) {
-                    message = message.embeds[0].description;
-      
-                    let client = message.match('\\*\\*(.*)\\s\\(')
-      
-                    let price = message.match('\\$([0-9]+)');
-      
-                    let employee = message.match('Gracza:\\*\\*\\s(.*)\\s\\(');
-      
+        if(message.channelId === botChannels.newBill)
+        {
+            if (message.author.bot && message.embeds) {
+                try {
+                    messageContents = message.embeds[0].description;
+                } catch (error) {
+                    console.log(error.message);
+                }
+                
+                if (typeof messageContents !== 'undefined' ) {
+                    let client = messageContents.match('\\*\\*(.*)\\s\\(')
+    
+                    let price = messageContents.match('\\$([0-9]+)');
+    
+                    let employee = messageContents.match('Gracza:\\*\\*\\s(.*)\\s\\(');
+    
                     if(price && employee && client)
                     {
                         console.log(client[1]);
@@ -65,5 +71,6 @@ module.exports = {
                     }
                 }
             }
+        }
     }
 }

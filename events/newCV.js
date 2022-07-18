@@ -20,14 +20,17 @@
  * 	@email canexione@gmail.com
  */
 
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
+const {botChannels} = require('../config.json');
 
 module.exports = {
     name: 'newCV',
     eventType: 'messageCreate',
     execute(message) {
-            if(message.channelId === '970267803762458674')
+            if(message.channelId === botChannels.sourceCVs)
             {
+
+                console.log(message);
 
                 if(message.attachments.size > 0)
                 {
@@ -37,7 +40,7 @@ module.exports = {
                 }
                 
                 if (!message.author.bot) {
-                    const embed = new MessageEmbed()
+                    const embed = new EmbedBuilder()
                         .setColor('#3da324')
                         .setTitle(`CV - ${message.author.username}`)
                         .setAuthor({ name: message.author.username, iconURL: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}.jpg` })
@@ -54,7 +57,7 @@ module.exports = {
                         }
                     }
 
-                    channel = message.guild.channels.cache.get('982368446929059881');
+                    channel = message.guild.channels.cache.get(botChannels.newCV);
 
                     channel.send({ embeds: [embed] });
                 }

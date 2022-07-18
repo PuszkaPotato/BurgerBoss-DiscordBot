@@ -19,12 +19,12 @@
  *  @github https://github.com/CanExiOne
  * 	@email canexione@gmail.com
  */
-
-const { SlashCommandBuilder } = require('@discordjs/builders');
+;
 const { Bills } = require('../database.js');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { Op, Sequelize } = require('sequelize');
 const dateHelper = require("../helpers/dateHelper.js");
+const {botChannels} = require('../config.json');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -96,7 +96,7 @@ module.exports = {
 					await interaction.reply({content: `**Suma Wystawionych Rachunków**`, ephermal: false});
 
 					try {
-						const embed = new MessageEmbed()
+						const embed = new EmbedBuilder()
                         .setColor('#3da324')
                         .setDescription(content)
                         .setTimestamp()
@@ -122,14 +122,14 @@ module.exports = {
 			const amount = interaction.options.getInteger('amount');
 
 			const content = `**${client}** otrzymał/a rachunek.\n**Kwota:** $${amount}\n**Od Gracza:** ${issuer}\n**Powód:** ${reason}`
-			const embed = new MessageEmbed()
+			const embed = new EmbedBuilder()
                         .setColor('#3da324')
                         .setTitle(`Wygenerowany Rachunek do Testów`)
                         .setDescription(content)
                         .setTimestamp()
                         .setFooter({ text: 'Wygenerowany rachunek'})
 
-                    channel = interaction.guild.channels.cache.get('981493766332514304');
+                    channel = interaction.guild.channels.cache.get(botChannels.newBill);
 
                     channel.send({ embeds: [embed] });
 		}
