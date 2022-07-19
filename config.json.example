@@ -1,11 +1,14 @@
 {
     "token":    "YOUR_TOKEN_HERE",
     "clientId": "APPLICATION_CLIENTID_HERE",
+    
+    "candidateRole" : "",
 
     "botChannels" : {
         "newCV" : "",
         "sourceCVs" : "",
-        "newBill" : ""
+        "newBill" : "",
+        "staffChannel" : ""
     },
 
     "DB" : {
