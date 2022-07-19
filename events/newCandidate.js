@@ -19,9 +19,10 @@ module.exports = {
             "Elliot Miller, Manager Restauracji BurgerShot\`\`\`" +
             "*Ta wiadomość została wysłana automatyczanie ponieważ zostało przyjęte CV Twojej postaci i nadano Ci rangę **Kandydat** na serwerze BurgerShot PixaRP*";
             await newMember.send(message).catch((error) => {});
-        }
-        channel = newMember.guild.channels.cache.get(botChannels.staffChannel);
 
-        await channel.send(`Wysłano wiadomość o zaakceptowanym CV do ${newMember}. Pamiętaj o napisaniu i umówieniu wizyty!`).catch(() => {});
+            channel = newMember.guild.channels.cache.get(botChannels.staffChannel);
+
+            await channel.send(`Wysłano wiadomość o zaakceptowanym CV do ${newMember}. Pamiętaj o napisaniu i umówieniu wizyty!`).catch(() => {});
+        }
     }
 }
