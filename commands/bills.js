@@ -93,9 +93,10 @@ module.exports = {
 						content = content.concat(`**${element['issuer']}**: **${element['sum_amount']} | ${element['count_amount']}**\n`);
 					});
 
-					await interaction.reply({content: `**Suma Wystawionych Rachunków**`, ephermal: false});
-
 					try {
+						await interaction.deferReply({ ephermal: true });
+						console.log(interaction);
+
 						const embed = new EmbedBuilder()
                         .setColor('#3da324')
                         .setDescription(content)
@@ -104,11 +105,15 @@ module.exports = {
 
                     	channel = interaction.guild.channels.cache.get(interaction.channelId);
 					
-						channel.send({ embeds: [embed] });
+						channel.send({ embeds: [embed] }).catch(() => {
+							interaction.member.send(`**Nie mam dostępu do tego kanału!** *(${interaction.channelId})*`)
+							
+							return interaction.editReply({ content: "**Wystąpił Błąd! Więcej informacji w wiadomości prywatnej!**", ephermal: true });
+						});
+
+						return interaction.editReply("**Suma Wystawionych Rachunków**");
 					} catch (error) {
 						console.log(error);
-
-						return interaction.followUp(`Wystąpił błąd podczas wysyłania sumy rachunków!`);
 					}
                     
 				})
@@ -131,7 +136,7 @@ module.exports = {
 
                     channel = interaction.guild.channels.cache.get(botChannels.newBill);
 
-                    channel.send({ embeds: [embed] });
+                    channel.send({ embeds: [embed] }).catch(() => {interaction.member.send("**Nie udało się wysłać wiadomości na wybrany kanał! Może to być brak uprawnień do kanału!**")});
 		}
 	}
 };

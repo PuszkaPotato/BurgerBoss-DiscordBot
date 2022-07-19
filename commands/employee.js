@@ -92,6 +92,8 @@ module.exports = {
 				return interaction.reply({content: 'Wystąpił nieznany błąd!', ephermal: true});
 			}
 		} else if (interaction.options.getSubcommand() === 'list') {
+
+			await interaction.deferReply();
 			
 			const embed = new EmbedBuilder()
                         .setColor('#3da324')
@@ -110,9 +112,14 @@ module.exports = {
 				})
 				channel = interaction.guild.channels.cache.get(interaction.channelId);
 	
-				channel.send({ embeds: [embed] });
+				channel.send({ embeds: [embed] }).catch((error) => {
+					interaction.member.send("Wystąpił błąd podczas wysyłania listy pracowników! Błąd:");
+					interaction.member.send(error.message);
 
-				return interaction.reply({content: `**Pomyślnie wysłano listę pracowników!**`, ephermal: true});
+					return interaction.editReply({ content: "Wystąpił błąd podczas wysyłania listy pracowników!", ephermal: true});
+				});
+
+				return interaction.editReply({content: `**Pomyślnie wysłano listę pracowników!**`, ephermal: true});
 			} catch (error) {
 				console.log(error);
 				
