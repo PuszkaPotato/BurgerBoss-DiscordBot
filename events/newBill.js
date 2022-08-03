@@ -20,8 +20,8 @@
  * 	@email canexione@gmail.com
  */
 
-const {Bills} = require('../database.js');
-const {botChannels} = require('../config.json');
+const {Bills} = require(appRoot + '/database.js');
+const {botChannels} = require(appRoot + '/config.json');
 
 module.exports = {
     name: 'newBill',

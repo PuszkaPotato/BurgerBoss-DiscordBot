@@ -21,7 +21,7 @@
  */
 
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
-const {Employees} = require('../database.js');
+const {Employees} = require(appRoot + '/database.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()

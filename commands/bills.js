@@ -20,11 +20,11 @@
  * 	@email canexione@gmail.com
  */
 ;
-const { Bills } = require('../database.js');
+const { Bills } = require(appRoot + '/database.js');
 const { EmbedBuilder, SlashCommandBuilder } = require('discord.js');
 const { Op, Sequelize } = require('sequelize');
-const dateHelper = require("../helpers/dateHelper.js");
-const {botChannels} = require('../config.json');
+const dateHelper = require(appRoot + '/helpers/dateHelper.js');
+const {botChannels} = require(appRoot + '/config.json');
 
 module.exports = {
 	data: new SlashCommandBuilder()

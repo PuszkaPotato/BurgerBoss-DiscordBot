@@ -21,7 +21,7 @@
  */
 
 const { EmbedBuilder } = require('discord.js');
-const {botChannels} = require('../config.json');
+const {botChannels} = require(appRoot + '/config.json');
 
 module.exports = {
     name: 'newCV',

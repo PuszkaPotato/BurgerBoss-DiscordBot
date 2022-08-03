@@ -4,7 +4,7 @@
  * 
  */
 
-const {candidateRole, botChannels} = require('../config.json');
+const {candidateRole, botChannels} = require(appRoot + '/config.json');
 
 module.exports = {
     name: "newCandidate",

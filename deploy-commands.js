@@ -19,16 +19,21 @@
  *  @github https://github.com/CanExiOne
  * 	@email canexione@gmail.com
  */
-
+const path = require('node:path');
+global.appRoot = path.resolve(__dirname);
+const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
-const { token, clientId, guildId } = require('./config.json');
+const { token, clientId, guildId } = require(appRoot + '/config.json');
 const fs = require('node:fs');
 
 const commands = [];
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const commandsPath = appRoot + '/commands/';
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
+	const filePath = path.join(commandsPath, file);
+	const command = require(filePath);
+
 	commands.push(command.data.toJSON());
 }
 

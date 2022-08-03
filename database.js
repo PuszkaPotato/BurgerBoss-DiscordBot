@@ -21,7 +21,7 @@
  */
 
 const Sequelize = require('sequelize');
-const { DB } = require('./config.json');
+const { DB } = require(appRoot + '/config.json');
 
 const sequelize = new Sequelize(DB.database, DB.user, DB.password , {
     host: DB.host,
