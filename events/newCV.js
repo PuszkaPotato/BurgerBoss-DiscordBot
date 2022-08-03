@@ -52,14 +52,14 @@ module.exports = {
                     {
                         if(attachment.contentType == 'image/png' || 'image/jpg' || 'image/jpeg')
                         {
-                            embed.addField('Załączone CV', '\u200B')
-                            embed.setImage(attachment.attachment)
+                            embed.addFields([{name: 'Załączone CV', value: '\u200B'}]);
+                            embed.setImage(attachment.attachment);
                         }
                     }
 
                     channel = message.guild.channels.cache.get(botChannels.newCV);
 
-                    channel.send({ embeds: [embed] });
+                    channel.send({ embeds: [embed] }).catch((error) => {console.log(error)});
                 }
                 
             }
