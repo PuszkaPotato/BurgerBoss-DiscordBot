@@ -10,7 +10,7 @@ module.exports = {
     name: "newCandidate",
     eventType: "guildMemberUpdate",
     async execute(oldMember, newMember) {
-        if(newMember.roles.cache.has(candidateRole))
+        if(newMember.roles.cache.has(candidateRole) && !oldMember.roles.cache.has(candidateRole))
         {
             message = "Otrzymano wiadomość e-mail z adresu **elliot.miller@burgershot.com** (<@218635445825699840>)\n\`\`\`Witam,\n\n" +
             "Dziękujemy za zainteresowanie pracą w restauracji BurgerShot. Jest to wiadomość mająca na celu poinformowanie cię o pozytywnym rozpatrzeniu Twojego CV. \n" +
