@@ -30,18 +30,22 @@
 
 function ConvertDateRange(startDate, endDate = null)
 {
-    var startDateString = startDate;
+    var startDateString = startDate.replace(/\./g, '/');
 
-    var startDate = startDate.split("/");
+    var startDate = startDate.split(/[s\/.]/);
 
     var startDateObject = new Date(`${startDate[1]}/${startDate[0]}/${startDate[2]}`).setHours(02, 00, 00);
     
     
     if(!(endDate instanceof Date) && endDate != null)
     {
-        var endDateString = endDate;
+        var endDateString = endDate.replace(/\./g, '/');
 
-        var endDate = endDate.split("/");
+        console.log(endDate)
+
+        var endDate = endDate.split(/[s\/.]/);
+
+        console.log(endDate)
 
         var endDateObject = new Date(`${endDate[1]}/${endDate[0]}/${endDate[2]}`).setHours(25,59,59);
     } else {
