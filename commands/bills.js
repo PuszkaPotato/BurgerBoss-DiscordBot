@@ -41,7 +41,7 @@ module.exports = {
 				.addStringOption(option =>
 					option.setName('enddate')
 					.setDescription('Końcowa data sumowanych rachunków')
-					.setRequired(true))
+					.setRequired(false))
 				
 		)
 		.addSubcommand(subcommand => 
