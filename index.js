@@ -24,12 +24,28 @@
 const fs = require('node:fs');
 const path = require('node:path');
 global.appRoot = path.resolve(__dirname);
-const { Client, Collection, GatewayIntentBits, InteractionType } = require('discord.js');
+const { Client, Collection, GatewayIntentBits, InteractionType, Partials } = require('discord.js');
 const { token } = require(appRoot + '/config.json');
 const { Employees, Bills } = require(appRoot + '/database.js');
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers]});
+const client = new Client(
+		{ 
+			intents: 
+			[
+				GatewayIntentBits.Guilds, 
+				GatewayIntentBits.GuildMessages, 
+				GatewayIntentBits.GuildMessageReactions, 
+				GatewayIntentBits.MessageContent, 
+				GatewayIntentBits.GuildMembers
+			],
+
+			partials:
+			[
+				Partials.GuildMember
+			]
+		}
+	);
 
 
 /**
